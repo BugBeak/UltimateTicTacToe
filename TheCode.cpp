@@ -1,8 +1,17 @@
 #include<iostream>
-#include<ncurses.h>
 #include<string>
 #include<stdio.h>
+#include<cstdlib> // for system()
 using namespace std;
+
+void clear_screen() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
 void display(char s[][10])
 {//1
  cout<<"                       row- horizontal; column- vertical     "<<endl;
@@ -31,12 +40,13 @@ void display(char s[][10])
  cout<<"                  -------------------------------------------"<<endl;
 }             //1
 
-
-
 int main(void)
 {//1
- clear();
- char board[9][10]={"         ","         ","         ","         ","         ","         ","         ","         ","         "};
+ clear_screen();
+ char board[9][10];
+ for(int i=0;i<9;i++)
+     for(int j=0;j<9;j++)
+         board[i][j] = ' ';
  cout<<"                              ULTIMATE TIC TAC TOE"<<endl;
  cout<<endl<<"The rules are: \n 1. Each turn, you mark one of the small squares"<<endl;
  cout<<" 2. When you get three in a row on a small board, you've won that board "<<endl;
@@ -66,19 +76,17 @@ int main(void)
   cin>>row;
   cout<<"               column   ";
   cin>>col;
- }while((row>10)&&(col>10));
+ }while((row>9)||(col>9));
  board[row-1][col-1]='x';
  display(board);
+ char something;
  do{
   cout<<"ready for next turn?";
-  char something;
   cin>>something;
- }while(something!='y'||something!='Y');
+ }while(something!='y'&&something!='Y');
  int player=2;
 
-
-
-// .................................................................
+ // .................................................................
 
  do
  {//3
@@ -136,7 +144,7 @@ int main(void)
     if ((available[blrow][blcol]==1)&&(board[row1-1][col1-1]==' '))
      board[row1-1][col1-1]='o';
    }while(board[row1-1][col1-1]==' ');
-   clear();
+   clear_screen();
    display(board);
    //4
   }
@@ -183,7 +191,7 @@ int main(void)
     if ((available[blrow][blcol]==1)&&(board[row-1][col-1]==' '))
      board[row-1][col-1]='x';
    }while(board[row-1][col-1]==' ');
-   clear();
+   clear_screen();
    display(board);
    //4
   }
@@ -357,7 +365,7 @@ int main(void)
   {
    cout<<"ready for next turn?";
    cin>>something;
-  }while(something!='y'||something!='Y');
+  }while(something!='y'&&something!='Y');
  }while(gameover==0);
  cout<<endl<<endl;
  if (gameover==1)
@@ -366,5 +374,6 @@ int main(void)
   cout<<" game ends. type a character. \t";
  char what;
  cin>>what;
- getch();
+ cin.get();
+ cin.get();
 }
